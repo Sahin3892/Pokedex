@@ -1,13 +1,26 @@
 body {
     margin: 0;
-    background-color: gray;
+    background-color: gray !important;
 }
+
 .pokedex {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    grid-gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .cards {
+    width: calc(20% - 20px); /* 20% Breite abzüglich des Abstands von 20px */
+    height: 208px;
+    color: white;
+    border-radius: 20px;
     padding: 16px;
+    margin: 10px; /* Abstand zwischen den Karten */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loadMore {
+    display: flex;
+    justify-content: center;
+    margin: 20px auto; /* Zentriere den Button horizontal und füge den Abstand hinzu */
 }

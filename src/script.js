@@ -2,9 +2,6 @@ let currentPokemon = []; // Die geladenen Pokémon zu speichern
 let offset = 0; // Der Startwert für den Offset zum Laden der Pokémon
 const limit = 40; // Die Anzahl der pro Ladung angeforderten Pokémon
 
-// Rufe die Funktion zum Laden der Pokémon auf, wenn die Seite geladen wird
-loadPokemon();
-
 // Funktion zum Laden der ersten 40 Pokémon
 async function loadPokemon() {
   let url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
@@ -28,10 +25,20 @@ async function renderPokemonList() {
     let response = await fetch(url);
     let detailedData = await response.json();
 
-    // Füge Name und Bild jedes Pokémon zur Anzeige hinzu
+    // Hier erhältst du das Array der Typen
+    let types = detailedData.types;
+    // Extrahiere den Namen des ersten Typs, falls vorhanden
+    let typeText = types.length > 0 ? types[0].type.name : "Unknown";
+
+    // Finde die passende Hintergrundfarbe basierend auf dem Typ
+    let backgroundColor = getBackgroundColorByType(typeText);
+
+    console.log(detailedData);
+    // Füge Name, Typ und Bild jedes Pokémon zur Anzeige hinzu
     renderContainer.innerHTML += /*html*/ `
-      <div class="cards">
+      <div class="cards" style="background-color: ${backgroundColor}">
         <p>${detailedData.name}</p>
+        <p>${typeText}</p>
         <img src="${detailedData.sprites.front_default}" alt="${detailedData.name}">
       </div>
     `;
@@ -51,5 +58,49 @@ async function loadMorePokemon() {
     renderPokemonList(); // Rufe die Funktion zum Rendern der Pokémon-Liste auf
   } else {
     console.log("Keine weiteren Daten verfügbar.");
+  }
+}
+
+// Funktion, um die Hintergrundfarbe basierend auf dem Typ zu erhalten
+function getBackgroundColorByType(type) {
+  switch (type) {
+    case "normal":
+      return "#A8A77A";
+    case "fire":
+      return "#EE8130";
+    case "water":
+      return "#6390F0";
+    case "electric":
+      return "#F7D02C";
+    case "grass":
+      return "#7AC74C";
+    case "ice":
+      return "#96D9D6";
+    case "fighting":
+      return "#C22E28";
+    case "poison":
+      return "#A33EA1";
+    case "ground":
+      return "#E2BF65";
+    case "flying":
+      return "#A98FF3";
+    case "psychic":
+      return "#F95587";
+    case "bug":
+      return "#A6B91A";
+    case "rock":
+      return "#B6A136";
+    case "ghost":
+      return "#735797";
+    case "dragon":
+      return "#6F35FC";
+    case "dark":
+      return "#705746";
+    case "steel":
+      return "#B7B7CE";
+    case "fairy":
+      return "#D685AD";
+    default:
+      return "transparent"; // Standardfarbe, falls der Typ nicht erkannt wird
   }
 }
