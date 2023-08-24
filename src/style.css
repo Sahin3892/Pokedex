@@ -4,21 +4,22 @@ body {
 }
 
 .pokedex {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
 }
 
 .cards {
     width: calc(20% - 20px); /* 20% Breite abzüglich des Abstands von 20px */
+    min-width: 208px; /* Mindestbreite von 180px */
     height: 208px;
     color: white;
     border-radius: 20px;
     padding: 16px;
     margin: 10px; /* Abstand zwischen den Karten */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s; /* Füge eine sanfte Übergangseffekt hinzu */
 }
-
 .loadMore {
     display: flex;
     justify-content: center;
