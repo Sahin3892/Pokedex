@@ -1,7 +1,7 @@
 let currentPokemon = []; // Die geladenen Pokémon zu speichern
 let offset = 0; // Der Startwert für den Offset zum Laden der Pokémon
 const limit = 40; // Die Anzahl der pro Ladung angeforderten Pokémon
-
+let currentIndex = 0;
 // Funktion zum Laden der ersten 40 Pokémon
 async function loadPokemon() {
   let url = `https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`;
@@ -27,18 +27,23 @@ async function renderPokemonList() {
 
     // Hier erhältst du das Array der Typen
     let types = detailedData.types;
+
     // Extrahiere den Namen des ersten Typs, falls vorhanden
     let typeText = types.length > 0 ? types[0].type.name : "Unknown";
 
+    // Extrahiere den Typ des Pokemons aus dem Zweiten Typ
+    let type2Text = types.length > 1 ? types[1].type.name : "";
+
+
     // Finde die passende Hintergrundfarbe basierend auf dem Typ
     let backgroundColor = getBackgroundColorByType(typeText);
-
     console.log(detailedData);
     // Füge Name, Typ und Bild jedes Pokémon zur Anzeige hinzu
     renderContainer.innerHTML += /*html*/ `
-      <div class="cards" style="background-color: ${backgroundColor}">
+      <div onclick="openCard(${i})" class="cards" style="background-color: ${backgroundColor}">
         <p>${detailedData.name}</p>
         <p>${typeText}</p>
+        <p>${type2Text}</p>
         <img src="${detailedData.sprites.front_default}" alt="${detailedData.name}">
       </div>
     `;
@@ -58,6 +63,60 @@ async function loadMorePokemon() {
     renderPokemonList(); // Rufe die Funktion zum Rendern der Pokémon-Liste auf
   } else {
     console.log("Keine weiteren Daten verfügbar.");
+  }
+}
+
+// Funktion zum Öffnen der Karte für ein ausgewähltes Pokémon
+function openCard(i) {
+  let pokemon = currentPokemon[i];
+  let url = pokemon.url;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((detailedData) => {
+      let types = detailedData.types;
+      let typeText = types.length > 0 ? types[0].type.name : "Unknown";
+
+      let backgroundColor = getBackgroundColorByType(typeText);
+
+      let overlay = document.getElementById("overlay");
+      overlay.style.display = "block"; // Zeige das Overlay an
+
+      let overlayContent = /*html*/ `
+        <div class="overlay-card" style="background-color: ${backgroundColor}">
+          <p>${detailedData.name}</p>
+          <p>${typeText}</p>
+          <img src="${detailedData.sprites.front_default}" alt="${detailedData.name}">
+        </div>
+      `;
+
+      overlay.innerHTML = overlayContent;
+
+      // Füge einen Event Listener hinzu, um das Overlay zu schließen
+      window.addEventListener("click", closeCardOutside);
+    })
+    .catch((error) => {
+      console.error("Fehler beim Laden der detaillierten Daten:", error);
+    });
+}
+
+// Funktion zum Schließen der Karte
+function closeCard() {
+  let overlay = document.getElementById("overlay");
+  overlay.style.display = "none";
+  overlay.innerHTML = ""; // Leere den Overlay-Inhalt
+
+  // Entferne den Event Listener, um das Overlay zu schließen
+  window.removeEventListener("click", closeCardOutside);
+}
+
+// Funktion zum Schließen des Overlays, wenn außerhalb der Karte geklickt wird
+function closeCardOutside(event) {
+  let overlayCard = document.querySelector(".overlay-card");
+
+  // Überprüfe, ob der geklickte Bereich außerhalb der Karte ist
+  if (!overlayCard.contains(event.target)) {
+    closeCard(); // Schließe die Karte
   }
 }
 
