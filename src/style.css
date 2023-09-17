@@ -10,8 +10,10 @@ body {
 }
 
 .cards {
+  cursor: pointer;
   width: calc(20% - 20px); /* 20% Breite abzüglich des Abstands von 20px */
-  min-width: 208px; /* Mindestbreite von 180px */
+  min-width: 200px; /* Mindestbreite von 200px */
+  max-width: 300px;
   height: 208px;
   color: white;
   border-radius: 20px;
@@ -19,7 +21,21 @@ body {
   margin: 10px; /* Abstand zwischen den Karten */
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: width 0.3s; /* Füge eine sanfte Übergangseffekt hinzu */
+  display: block;
+  flex-direction: row-reverse; /* Ändere die Richtung auf rechtsbündig */
+  align-items: center; /* Zentriere vertikal */
 }
+
+.card-content {
+  display: flex;
+  flex-grow: 1; /* Nimmt den verfügbaren Platz ein */
+}
+
+.card-text {
+  padding-right: 20px; /* Füge rechten Abstand zum Text hinzu */
+}
+
+
 .loadMore {
   display: flex;
   justify-content: center;
@@ -38,6 +54,8 @@ body {
 }
 
 .overlay-card {
+  color: white;
+  cursor: pointer;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -46,4 +64,49 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  height: 400px;
+}
+
+.cardIMG {
+  margin-left: auto;
+  object-fit: contain;
+  padding-top: 100px;
+}
+
+.imgOverlay {
+  padding-left: 30%;
+}
+
+.cardTyp {
+  margin-top: 35px;
+  border: 1px solid white;
+  border-radius: 10px;
+  width: 50px;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftRight {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 120px; /* Abstand zum unteren Rand */
+  left: 0;
+  right: 0;
+}
+
+.nav {
+  font-size: smaller;
+}
+
+.pokeDetails {
+  padding-top: 30px;
+}
+
+*, ::after, ::before {
+  box-sizing: content-box !important; /* Überschreibe die Bootstrap-Stile */
 }
